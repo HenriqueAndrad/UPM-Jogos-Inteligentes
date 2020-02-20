@@ -1,0 +1,12 @@
+
+ 1 - A população inicial deve ser definida com uma estimativa após analisar o problema e as capacidades de solução. No caso, para analisar qual o caminho do NPC temos que ver quantos "tiles" estão disponíveis para a movimentação e armazenar em um vetor.
+
+2 - Para avaliar quais cromossomos são melhores, devemos ver quem chegou no objetivo de forma mais otimizadas, nesse caso pode ser avaliado qual cromossomo teve a menor quantidade movimentos necessários para terminar.
+
+3 - A seleção dos pais deve ser os dois melhores cromossomos de cada geração.
+
+4 - Um jeito de fazer o cruzamento é pegar metade de um dos pais e juntar com a metade do outro pai. Exemplo: Existe um Pai com a características “AA” e o outro Pai possui características “BB”, quando o cruzamento for feito, serão criados os filhos “AB” e “BA”.
+
+5 - Um filho pode sofrer mutação quando ele altera de alguma forma uma ou mais características herdadas dos pais. Por exemplo, um filho que teoricamente seria “AB”/ “BA” pode ser “AC” ou “CB”.
+
+6 - Para criar uma nova população, cria se um novo conjunto de indivíduos, com diferentes cromossomos para o mesmo objetivo da geração anterior, depois analisa se esses novos casos em separado da geração passada.
