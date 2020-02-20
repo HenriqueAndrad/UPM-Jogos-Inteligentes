@@ -1,5 +1,6 @@
+0 - Quando salvamos todas as posições possíveis de movimento em um vetor, o caminho de um NPC seria uma sequência de valores das posições dentro desse vetor.
 
- 1 - A população inicial deve ser definida com uma estimativa após analisar o problema e as capacidades de solução. No caso, para analisar qual o caminho do NPC temos que ver quantos "tiles" estão disponíveis para a movimentação e armazenar em um vetor.
+1 - A população inicial deve ser definida com uma estimativa após analisar o problema e as capacidades de solução. No caso, para analisar qual o caminho do NPC temos que ver quantos "tiles" estão disponíveis para a movimentação e armazenar em um vetor.
 
 2 - Para avaliar quais cromossomos são melhores, devemos ver quem chegou no objetivo de forma mais otimizadas, nesse caso pode ser avaliado qual cromossomo teve a menor quantidade movimentos necessários para terminar.
 
