@@ -1,4 +1,5 @@
 0 - Quando salvamos todas as posições possíveis de movimento em um vetor, o caminho de um NPC seria uma sequência de valores das posições dentro desse vetor.
+Então nesse caso, supondo que esse mapa tenha 50 posições disponíveis para o player se movimentar, onde o 1 é a primeira posição disponível e o 50 é seu objetivo, conforme o player se movimenta aleatoriamente entre os pontos cardeais, ele armazenará essa sequência no seu “vetor de caminho” até chegar em seu objetivo [1,2,3,4,3….50].
 
 1 - A população inicial deve ser definida com uma estimativa após analisar o problema e as capacidades de solução. No caso, para analisar qual o caminho do NPC temos que ver quantos "tiles" estão disponíveis para a movimentação e armazenar em um vetor.
 
