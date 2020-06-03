@@ -11,17 +11,26 @@ namespace Rede_Multicamada
     {
         static float[] m_Inputs;
         static float[] m_Pesos;
-        public float m_Saida = 0.0f;
+        public float Saida { get => SigmoidActive(); }
+        private float m_saida;
 
         public Neuronio(float[] Pesos, float[] Inputs)
         {
             m_Pesos = Pesos;
             m_Inputs = Inputs;
-            
-            Roberto();
+            m_saida = 0;
+
+            //foreach (float f in m_Pesos)
+            //{
+            //    Console.WriteLine("Peso: " + f);
+            //}
+            //foreach (float f in m_Inputs)
+            //{
+            //    Console.WriteLine("Input: " + f);
+            //}
         }
 
-        void Roberto()
+        static float Roberto()
         {
             float Somataria = 0.0f;
 
@@ -31,12 +40,12 @@ namespace Rede_Multicamada
             }
 
             //1 / 1 + E^-X onde X = Somatoria
-            m_Saida = SigmoidActive(Somataria);
+            return Somataria;
         }
 
-        static float SigmoidActive(float x)
+        static float SigmoidActive()
         {
-            return 1.0f / (1.0f + MathF.Pow(MathF.E, -x));
+            return 1.0f / (1.0f + MathF.Exp(-Roberto()));
         }
     }
 
@@ -50,7 +59,7 @@ namespace Rede_Multicamada
             string Treino = Directory.GetCurrentDirectory() + "\\..\\..\\..\\..\\irisTrain.txt";
             string Teste = Directory.GetCurrentDirectory() + "\\..\\..\\..\\..\\irisTest.txt" ;
             
-            string[] fileTreino = File.ReadAllLines(Treino);
+            string[] fileTreino = File.ReadAllLines(Treino); 
 
             float[][] valores_inputs = new float[fileTreino.Length][];
             string[] resultadosEsperados = new string[fileTreino.Length];
@@ -71,6 +80,7 @@ namespace Rede_Multicamada
                     if (j != 4)
                     {
                         valores_inputs[i][j] = float.Parse(line[j], number);
+                       // Console.WriteLine(valores_inputs[i][j]);
                     }
                     else
                     {
@@ -81,12 +91,14 @@ namespace Rede_Multicamada
             }
 
             //perceptrons
-            int neuroniosOculta = 3;
-            int neuroniosSaida = 1;
+            int neuroniosOculta = 5;
+            int neuroniosSaida = 3;
             int numeroInputs = 4;
             float taxaAprendizado = 0.1f;
-            float valorParar = 1.000007f;
-            int valorPararContador = 100;
+            float valorParar  = 0.5f;
+            int valorPararContador = 90;
+            int maximoGeracoes = 30000;
+            int geracaoAtual = 0;
 
             float[][] valores_pesosOculta = new float[neuroniosOculta][];
             float[][] valores_pesosSaida = new float[neuroniosSaida][];
@@ -129,7 +141,7 @@ namespace Rede_Multicamada
                 }
             }
 
-            Console.WriteLine("PESOS CAMADA SAIDA ANTES DO TREINO");
+            Console.WriteLine("\nPESOS CAMADA SAIDA ANTES DO TREINO");
             for (int i = 0; i < valores_pesosSaida.Length; i++)
             {
                 for (int j = 0; j < valores_pesosSaida[i].Length; j++)
@@ -138,77 +150,118 @@ namespace Rede_Multicamada
                 }
             }
 
-            while (true)
+            
+            Treinamento();
+
+            void Treinamento()
             {
-                int contadorErroQuadratico = 0;
-                for (int i = 0; i < valores_inputs.Length; i++)
+
+                Console.ReadLine();
+                while (true)
                 {
-                    Neuronio[] camadaOculta = new Neuronio[neuroniosOculta];
-                    Neuronio[] camadaSaida = new Neuronio[neuroniosSaida];
-                    float[] saidasCamadaOculta = new float[neuroniosOculta];
-
-                    //calculo camada oculta
-                    for (int j = 0; j < camadaOculta.Length; j++)
+                    int contadorErroQuadratico = 0;
+                    for (int i = 0; i < valores_inputs.Length; i++)
                     {
-                        camadaOculta[j] = new Neuronio(valores_pesosOculta[j], valores_inputs[i]);
-                        saidasCamadaOculta[j] = camadaOculta[j].m_Saida;
-                    }
+                        Neuronio[] camadaOculta = new Neuronio[neuroniosOculta];
+                        Neuronio[] camadaSaida = new Neuronio[neuroniosSaida];
+                        float[] saidasCamadaOculta = new float[neuroniosOculta];
 
-                    //calculo camada saida
-                    for (int j = 0; j < camadaSaida.Length; j++)
-                    {
-                        camadaSaida[j] = new Neuronio(valores_pesosSaida[j], saidasCamadaOculta);
-                    }
-
-                    float[] errosCamadaSaida = new float[neuroniosSaida];
-                    float[] derivadasSaida = new float[neuroniosSaida];
-                    float[] errosSaida = new float[neuroniosSaida];
-                    float erroTotalSaida = 0f;
-                    for (int j = 0; j < errosCamadaSaida.Length; j++)
-                    {
-                        errosCamadaSaida[j] = florNumero[i] - camadaSaida[j].m_Saida;
-                        derivadasSaida[j] = camadaSaida[j].m_Saida * (1f - camadaSaida[j].m_Saida);
-                        errosSaida[j] = errosCamadaSaida[j] * derivadasSaida[j];
-                        erroTotalSaida += errosSaida[j];
-                    }
-
-                    float erroQuadratico = 0f;
-                    for (int j = 0; j < errosCamadaSaida.Length; j++)
-                    {
-                        erroQuadratico += errosCamadaSaida[j] * errosCamadaSaida[j];
-                    }
-
-                    if (erroQuadratico < valorParar)
-                    {
-                        ++contadorErroQuadratico;
-                    }
-
-                    for (int j = 0; j < errosCamadaSaida.Length; j++)
-                    {
-                        for (int w = 0; w < valores_pesosSaida[j].Length; w++)
+                        //calculo camada oculta
+                        for (int j = 0; j < camadaOculta.Length; j++)
                         {
-                            //atualizando pesos entre camada oculta e saida
-                            valores_pesosSaida[j][w] += taxaAprendizado * errosSaida[j] * saidasCamadaOculta[w];
+                            camadaOculta[j] = new Neuronio(valores_pesosOculta[j], valores_inputs[i]);
+                            saidasCamadaOculta[j] = camadaOculta[j].Saida;
                         }
-                    }
 
-                    float[] derivadasOculta = new float[neuroniosOculta];
-                    float erroOculta = 0f;
-                    for (int j = 0; j < derivadasOculta.Length; j++)
-                    {
-                        derivadasOculta[j] = camadaOculta[j].m_Saida * (1f - camadaOculta[j].m_Saida);
-                        erroOculta = derivadasOculta[j] * erroTotalSaida;
-
-                        for (int w = 0; w < valores_pesosOculta[j].Length; w++)
+                        //calculo camada saida
+                        for (int j = 0; j < camadaSaida.Length; j++)
                         {
-                            valores_pesosOculta[j][w] += taxaAprendizado * erroOculta * valores_inputs[i][w];
+                            camadaSaida[j] = new Neuronio(valores_pesosSaida[j], saidasCamadaOculta);
                         }
+
+                        float[] errosCamadaSaida = new float[neuroniosSaida];
+                        float[] derivadasSaida = new float[neuroniosSaida];
+                        float[] errosSaida = new float[neuroniosSaida];
+                        float erroTotalSaida = 0f;
+                        for (int j = 0; j < errosCamadaSaida.Length; j++)
+                        {
+                            errosCamadaSaida[j] = florNumero[i] - camadaSaida[j].Saida;
+                           // Console.WriteLine(florNumero[i] + " "+ camadaSaida[j].Saida);
+                            derivadasSaida[j] = camadaSaida[j].Saida * (1f - camadaSaida[j].Saida);
+                            errosSaida[j] = errosCamadaSaida[j] * derivadasSaida[j];
+                            erroTotalSaida += errosSaida[j];
+                          
+                        }
+
+                        float erroQuadratico = 0f;
+                        for (int j = 0; j < errosCamadaSaida.Length; j++)
+                        {
+                            erroQuadratico += errosCamadaSaida[j] * errosCamadaSaida[j];
+                        }
+
+                        if (erroQuadratico < valorParar)
+                        {
+                            ++contadorErroQuadratico;
+                        }
+                        Console.WriteLine(erroQuadratico);
+
+                        for (int j = 0; j < errosCamadaSaida.Length; j++)
+                        {
+                            for (int w = 0; w < valores_pesosSaida[j].Length; w++)
+                            {
+                                //atualizando pesos entre camada oculta e saida
+                                valores_pesosSaida[j][w] += taxaAprendizado * errosSaida[j] * saidasCamadaOculta[w];
+                            }
+                        }
+
+                        float[] derivadasOculta = new float[neuroniosOculta];
+                        float erroOculta = 0f;
+                        for (int j = 0; j < derivadasOculta.Length; j++)
+                        {
+                            derivadasOculta[j] = camadaOculta[j].Saida * (1.0f - camadaOculta[j].Saida);
+                            erroOculta = derivadasOculta[j] * erroTotalSaida;
+
+                            for (int w = 0; w < valores_pesosOculta[j].Length; w++)
+                            {
+                                //atualizando pesos entre camada de input e oculta
+                                valores_pesosOculta[j][w] += taxaAprendizado * erroOculta * valores_inputs[i][w];
+                            }
+                        }
+                       // Console.ReadLine();
+
+                        geracaoAtual++;
                     }
 
-                }
-                if (contadorErroQuadratico > valorPararContador)
-                {
-                    break;
+                    if (contadorErroQuadratico > valorPararContador)
+                    {
+                        break;
+                    }
+                    else if (geracaoAtual >= maximoGeracoes)
+                    {
+                        geracaoAtual = 0;
+
+                        //reinicializando pesos
+                        Console.WriteLine("Não consegue né");
+                        for (int i = 0; i < valores_pesosOculta.Length; i++)
+                        {
+                            for (int j = 0; j < numeroInputs; j++)
+                            {
+                                valores_pesosOculta[i][j] = (float)rnd.NextDouble();
+                            }
+                        }
+
+                        for (int i = 0; i < valores_pesosSaida.Length; i++)
+                        {
+                            for (int j = 0; j < neuroniosOculta; j++)
+                            {
+                                valores_pesosSaida[i][j] = (float)rnd.NextDouble();
+                            }
+                        }
+
+                        Treinamento();
+
+                        break;
+                    }
                 }
             }
 
@@ -234,9 +287,9 @@ namespace Rede_Multicamada
             //testando
             string[] fileTeste = File.ReadAllLines(Teste);
 
-            valores_inputs = new float[fileTeste.Length - 1][];
-            resultadosEsperados = new string[fileTeste.Length - 1];
-            florNumero = new float[fileTeste.Length - 1];
+            valores_inputs = new float[fileTeste.Length][];
+            resultadosEsperados = new string[fileTeste.Length];
+            florNumero = new float[fileTeste.Length];
 
             for (int i = 0; i < valores_inputs.Length; i++)
             {
@@ -273,21 +326,21 @@ namespace Rede_Multicamada
                 for (int j = 0; j < testeCamadaOculta.Length; j++)
                 {
                     testeCamadaOculta[j] = new Neuronio(valores_pesosOculta[j], valores_inputs[j]);
-                    testeSaidasCamadaOculta[j] = testeCamadaOculta[j].m_Saida;
+                    testeSaidasCamadaOculta[j] = testeCamadaOculta[j].Saida;
                 }
 
                 for (int j = 0; j < testeCamadaSaida.Length; j++)
                 {
                     testeCamadaSaida[j] = new Neuronio(valores_pesosSaida[j], testeSaidasCamadaOculta);
-                    if (testeCamadaSaida[j].m_Saida < 0.3f)
+                    if (testeCamadaSaida[j].Saida < 0.3f)
                     {
                         Console.WriteLine("Resultado é iris-setosa");
                     }
-                    else if (testeCamadaSaida[j].m_Saida >= 0.3f && testeCamadaSaida[j].m_Saida <= 0.6f)
+                    else if (testeCamadaSaida[j].Saida >= 0.3f && testeCamadaSaida[j].Saida <= 0.6f)
                     {
                         Console.WriteLine("Resultado é iris-versicolor");
                     }
-                    else if (testeCamadaSaida[j].m_Saida > 0.6f)
+                    else if (testeCamadaSaida[j].Saida > 0.6f)
                     {
                         Console.WriteLine("Resultado é iris-virginica");
                     }
@@ -301,17 +354,17 @@ namespace Rede_Multicamada
     {
         public static float Converter(this String flor)
         {
-            if (flor == "iris-setosa")
+            if (flor == "Iris-setosa")
+            {
+                return 0f;
+            }
+            if (flor == "Iris-versicolor")
+            {
+                return 0.5f;
+            }
+            if (flor == "Iris-virginica")
             {
                 return 1f;
-            }
-            if (flor == "iris-versicolor")
-            {
-                return 1.5f;
-            }
-            if (flor == "iris-virginica")
-            {
-                return 2f;
             }
 
             return -1f;
