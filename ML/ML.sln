@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1022
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ML", "ML\ML.csproj", "{9080B8B0-30D8-4C99-9B62-C7F409FE43F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLML.Model", "MLML.Model\MLML.Model.csproj", "{6BAE2011-1702-4554-8B8F-E3DB5B6393C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLML.ConsoleApp", "MLML.ConsoleApp\MLML.ConsoleApp.csproj", "{DD406921-2FFD-4BA7-BFC6-05057FFAB6D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9080B8B0-30D8-4C99-9B62-C7F409FE43F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9080B8B0-30D8-4C99-9B62-C7F409FE43F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9080B8B0-30D8-4C99-9B62-C7F409FE43F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9080B8B0-30D8-4C99-9B62-C7F409FE43F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BAE2011-1702-4554-8B8F-E3DB5B6393C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BAE2011-1702-4554-8B8F-E3DB5B6393C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BAE2011-1702-4554-8B8F-E3DB5B6393C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BAE2011-1702-4554-8B8F-E3DB5B6393C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD406921-2FFD-4BA7-BFC6-05057FFAB6D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD406921-2FFD-4BA7-BFC6-05057FFAB6D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD406921-2FFD-4BA7-BFC6-05057FFAB6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD406921-2FFD-4BA7-BFC6-05057FFAB6D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6778BB22-071B-47CB-9DDC-4CC0DA9A928B}
+	EndGlobalSection
+EndGlobal
